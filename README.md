@@ -5,7 +5,7 @@ Some of these come from single projects, others — from a common codebase for t
 
 They are written both in Java and Kotlin.
 
-:cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future. There is also a simple Android app which I can run and test something.
+:cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future. There is also a simple Android app which I can run and test something against.
 
 ## Tests
 
@@ -68,7 +68,7 @@ It has waiters, view property getters, improved assert messages, syntactic sugar
 
 * [`EspressoExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/EspressoExtensions.java) | [`EspressoExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/EspressoExtensions.kt) — custom Espresso-like methods/functions (also, consider Kaspresso)
 * [`UiAutomatorExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/UiAutomatorExtensions.java) | [`UiAutomatorExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/UiAutomatorExtensions.kt) — custom methods/functions to work with
-UI Automator's API, mostly with [`UiObject2`](https://developer.android.com/reference/android/support/test/uiautomator/UiObject2) UI elements
+UI Automator's API, mostly with [`UiObject2`](https://developer.android.com/reference/androidx/test/uiautomator/UiObject2) UI elements
 * [`AndroidExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/AndroidExtensions.java) | [`AndroidExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/AndroidExtensions.kt) — device-specific actions
 
 ## TMS Integration
@@ -82,7 +82,7 @@ To make it work you need to:
 
 * Add [TestRail API bindings](http://docs.gurock.com/testrail-api2/start) to your project (unfortunately, you can't add it as a dependency yet)
 * Create [`AndroidManifest.xml`](app/src/androidTest/AndroidManifest.xml) for a test app 
-* Annotate your tests with Test Case ID from TestRail (you need [custom annotation](app/src/androidTest/java/pavelnazimok/uitestingfeatures/testrail/CaseId.java) for this):
+* Annotate your tests with Test Case ID from TestRail (you need a custom [Annotation](app/src/androidTest/java/pavelnazimok/uitestingfeatures/testrail/CaseId.java) for this):
 
 ```Java
 @Test 
