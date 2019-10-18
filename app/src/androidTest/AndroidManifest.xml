@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package="pavelnazimok.uitestingfeatures">
+
+<instrumentation
+    android:name="androidx.test.runner.AndroidJUnitRunner"
+    android:targetPackage="pavelnazimok.uitestingfeatures">
+    <meta-data
+        android:name="listener"
+        android:value="pavelnazimok.uitestingfeatures.testrail.ReporterRunListener" />
+</instrumentation>
+</manifest>

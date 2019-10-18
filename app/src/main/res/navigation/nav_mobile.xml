@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_mobile"
+    app:startDestination="@+id/nav_first">
+
+    <fragment
+        android:id="@+id/nav_first"
+        android:name="pavelnazimok.uitestingfeatures.FirstScreen"
+        android:label="@string/title_screen_first"
+        tools:layout="@layout/screen_first" />
+
+    <fragment
+        android:id="@+id/nav_second"
+        android:name="pavelnazimok.uitestingfeatures.SecondScreen"
+        android:label="@string/title_screen_second"
+        tools:layout="@layout/screen_second" />
+
+    <fragment
+        android:id="@+id/nav_third"
+        android:name="pavelnazimok.uitestingfeatures.ThirdScreen"
+        android:label="@string/title_screen_third"
+        tools:layout="@layout/screen_third" />
+</navigation>

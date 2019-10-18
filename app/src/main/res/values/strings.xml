@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Android UI Testing Features</string>
+
+    <string name="title_screen_first">First Screen</string>
+    <string name="title_screen_second">Second Screen</string>
+    <string name="title_screen_third">Third Screen</string>
+
+    <string name="label_coffee_select">Select coffee cups amount:</string>
+    <string name="label_coffee_price">Coffee cup price: $</string>
+    <string name="label_total_price">Total price: $</string>
+    <string name="button_coffee_increment">+</string>
+    <string name="button_coffee_decrement">—</string>
+    <string name="label_coffee_count_initial">0</string>
+
+    <string name="button_alert_dialog">Alert Dialog</string>
+    <string name="button_alert_dialog_positive">OK</string>
+    <string name="button_alert_dialog_negative">Cancel</string>
+    <string name="message_alert_dialog">Let\'s pretend this is a system dialog and handle it with UI Automator</string>
+
+    <string name="button_listview">Show ListView</string>
+    <string name="label_item_select">You clicked:</string>
+    <string name="label_item_selected">&lt;select something from ListView&gt;</string>
+</resources>

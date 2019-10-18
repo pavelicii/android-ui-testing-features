@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_first"
+        android:icon="@drawable/ic_looks_one_black_24dp"
+        android:title="@string/title_screen_first" />
+
+    <item
+        android:id="@+id/nav_second"
+        android:icon="@drawable/ic_looks_two_black_24dp"
+        android:title="@string/title_screen_second" />
+
+    <item
+        android:id="@+id/nav_third"
+        android:icon="@drawable/ic_looks_3_black_24dp"
+        android:title="@string/title_screen_third" />
+
+</menu>
