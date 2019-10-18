@@ -1,6 +1,6 @@
 # Android UI Testing Features
 
-I use this repository as storage of Android UI testing practices which I used in my work: test patterns, naming conventions, wrapper methods for test and device actions, etc.
+I use this repository as storage of Android UI testing practices from my experience: test patterns, naming conventions, wrapper methods for test and device actions, etc.
 Some of these come from single projects, others — from a common codebase for tests.
 
 They are written both in Java and Kotlin.
