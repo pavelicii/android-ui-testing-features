@@ -14,17 +14,22 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions;
 import pavelnazimok.uitestingfeatures.java.utils.UiAutomatorTimeoutException;
 
@@ -55,6 +60,57 @@ public class DeviceRobot {
 
     private int networkTypeBeforeDisabling = -1;
     public boolean networkWasDisabledDuringTest = false;
+
+    public Response getHttpResponse(String url) throws IOException {
+        int retryAttempts = 3;
+
+        OkHttpClient httpClient = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .build();
+
+        IOException requestException = null;
+        Response response = null;
+
+        for (int i = 0; i < retryAttempts; ++i) {
+            try {
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+
+                if (response != null) {
+                    response.close();
+                }
+
+                response = httpClient.newCall(request).execute();
+
+                if (response.isSuccessful()) {
+                    break;
+                }
+            } catch (IOException e) {
+                Log.d("UI Test: getHttpResponse", "Error accessing " + url);
+
+                if (i == retryAttempts - 1) {
+                    requestException = e;
+                }
+            } finally {
+                httpClient.connectionPool().evictAll();
+            }
+
+            sleepThread(1000);
+        }
+
+        httpClient.dispatcher().executorService().shutdown();
+        if (httpClient.cache() != null) {
+            //noinspection ConstantConditions
+            httpClient.cache().close();
+        }
+
+        if (requestException != null) {
+            throw requestException;
+        }
+
+        return response;
+    }
 
     /**
      * Enable or disable network on the device. Works with 2 types: Wi-Fi and Mobile data.
