@@ -177,6 +177,15 @@ fun waitUntilNotDisplayedByIdAndText(
     waitUntilNotDisplayedByIdAndText(resId(viewId), resText(stringId), timeout)
 }
 
+fun UiObject2.setChecked(check: Boolean) {
+    if (check && !this.isChecked) {
+        this.click()
+    } else if (!check && this.isChecked) {
+        this.click()
+    }
+    this.waitUntilChecked(check)
+}
+
 fun UiObject2.waitUntilEnabled(timeout: Long = 3000) {
     if (!this.wait(Until.enabled(true), timeout)) {
         throw TimeoutException("The UiObject2 with ID '${resId(this)}' " +
@@ -185,10 +194,10 @@ fun UiObject2.waitUntilEnabled(timeout: Long = 3000) {
     }
 }
 
-fun UiObject2.waitUntilChecked(checked: Boolean, timeout: Long = 3000) {
-    if (!this.wait(Until.checked(checked), timeout)) {
+fun UiObject2.waitUntilChecked(check: Boolean, timeout: Long = 3000) {
+    if (!this.wait(Until.checked(check), timeout)) {
         throw TimeoutException("The UiObject2 with ID '${resId(this)}' " +
-            "was not checked within $timeout millis"
+            "was not set to $check within $timeout millis"
         )
     }
 }

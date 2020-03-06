@@ -2,6 +2,7 @@ package pavelnazimok.uitestingfeatures.kotlin.utils
 
 import android.view.View
 import android.view.WindowManager
+import android.widget.Checkable
 import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.IdRes
@@ -14,11 +15,16 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions.sleepThread
 import com.schibsted.spain.barista.internal.util.resourceMatcher
 import junit.framework.AssertionFailedError
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.BaseMatcher
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.anything
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -146,6 +152,39 @@ fun waitForToast(matcher: Matcher<View>, timeout: Long = 20000) {
     }
 
     throw TimeoutException("The Toast $matcher was not found within $timeout millis")
+}
+
+fun setChecked(matcher: Matcher<View?>, check: Boolean) {
+    onView(matcher).perform(object : ViewAction {
+        override fun getConstraints(): BaseMatcher<View> {
+            return object : BaseMatcher<View>() {
+                override fun matches(item: Any): Boolean {
+                    return CoreMatchers.isA(Checkable::class.java).matches(item)
+                }
+
+                override fun describeMismatch(item: Any, mismatchDescription: Description) {}
+                override fun describeTo(description: Description) {}
+            }
+        }
+
+        override fun getDescription(): String? {
+            return null
+        }
+
+        override fun perform(uiController: UiController, view: View) {
+            val checkableView = view as Checkable
+
+            if (check && !checkableView.isChecked) {
+                view.performClick()
+            } else if (!check && checkableView.isChecked) {
+                view.performClick()
+            }
+        }
+    })
+}
+
+fun setChecked(viewId: Int, check: Boolean) {
+    setChecked(withId(viewId), check)
 }
 
 fun getText(matcher: Matcher<View>): String {

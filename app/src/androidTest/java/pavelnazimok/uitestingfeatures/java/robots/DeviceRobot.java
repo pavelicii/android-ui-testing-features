@@ -51,7 +51,7 @@ import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.fi
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByIdAndTextPattern;
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByText;
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByTextPattern;
-import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.waitUntilChecked;
+import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.setChecked;
 
 @SuppressWarnings({ "UnusedReturnValue", "WeakerAccess" })
 public class DeviceRobot {
@@ -261,19 +261,11 @@ public class DeviceRobot {
 
         UiObject2 alwaysOnSwitch = findById("switch_widget", 10000);
         if (enabled) {
-            if (alwaysOnSwitch.isChecked()) {
-                alwaysOnSwitch.click();
-                waitUntilChecked(alwaysOnSwitch, false, 3000);
-            }
-            alwaysOnSwitch.click();
-            waitUntilChecked(alwaysOnSwitch, true, 3000);
+            setChecked(alwaysOnSwitch, false);
+            setChecked(alwaysOnSwitch, true);
         } else {
-            if (!alwaysOnSwitch.isChecked()) {
-                alwaysOnSwitch.click();
-                waitUntilChecked(alwaysOnSwitch, true, 3000);
-            }
-            alwaysOnSwitch.click();
-            waitUntilChecked(alwaysOnSwitch, false, 3000);
+            setChecked(alwaysOnSwitch, true);
+            setChecked(alwaysOnSwitch, false);
         }
 
         if (appActivity != null) {

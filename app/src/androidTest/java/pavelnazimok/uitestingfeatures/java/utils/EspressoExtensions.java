@@ -3,6 +3,7 @@ package pavelnazimok.uitestingfeatures.java.utils;
 import android.os.IBinder;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Checkable;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -34,6 +36,7 @@ import static com.schibsted.spain.barista.internal.util.ResourceTypeKt.resourceM
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.not;
 import static pavelnazimok.uitestingfeatures.java.utils.AndroidExtensions.resId;
 import static pavelnazimok.uitestingfeatures.java.utils.AndroidExtensions.resText;
@@ -159,6 +162,46 @@ public class EspressoExtensions {
         }
 
         throw new EspressoTimeoutException(String.format("The Toast with text '%s' was not found within %d millis", text, timeout));
+    }
+
+    public static void setChecked(Matcher<View> matcher, boolean check) {
+        onView(matcher).perform(new ViewAction() {
+            @Override
+            public BaseMatcher<View> getConstraints() {
+                return new BaseMatcher<View>() {
+                    @Override
+                    public boolean matches(Object item) {
+                        return isA(Checkable.class).matches(item);
+                    }
+
+                    @Override
+                    public void describeMismatch(Object item, Description mismatchDescription) {}
+
+                    @Override
+                    public void describeTo(Description description) {}
+                };
+            }
+
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                Checkable checkableView = (Checkable) view;
+
+                if (check && !checkableView.isChecked()) {
+                    view.performClick();
+                } else if (!check && checkableView.isChecked()) {
+                    view.performClick();
+                }
+            }
+        });
+    }
+
+    public static void setChecked(int viewId, boolean check) {
+        setChecked(withId(viewId), check);
     }
 
     public static String getText(Matcher<View> matcher) {

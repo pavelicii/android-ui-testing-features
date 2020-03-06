@@ -41,8 +41,8 @@ import pavelnazimok.uitestingfeatures.kotlin.utils.openNotification
 import pavelnazimok.uitestingfeatures.kotlin.utils.pressBack
 import pavelnazimok.uitestingfeatures.kotlin.utils.resText
 import pavelnazimok.uitestingfeatures.kotlin.utils.runningActivityOfAppUnderTest
+import pavelnazimok.uitestingfeatures.kotlin.utils.setChecked
 import pavelnazimok.uitestingfeatures.kotlin.utils.targetContext
-import pavelnazimok.uitestingfeatures.kotlin.utils.waitUntilChecked
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -262,19 +262,11 @@ class DeviceRobot {
 
         val alwaysOnSwitch = findById("switch_widget")
         if (enabled) {
-            if (alwaysOnSwitch.isChecked) {
-                alwaysOnSwitch.click()
-                alwaysOnSwitch.waitUntilChecked(false)
-            }
-            alwaysOnSwitch.click()
-            alwaysOnSwitch.waitUntilChecked(true)
+            alwaysOnSwitch.setChecked(false)
+            alwaysOnSwitch.setChecked(true)
         } else {
-            if (!alwaysOnSwitch.isChecked) {
-                alwaysOnSwitch.click()
-                alwaysOnSwitch.waitUntilChecked(true)
-            }
-            alwaysOnSwitch.click()
-            alwaysOnSwitch.waitUntilChecked(false)
+            alwaysOnSwitch.setChecked(true)
+            alwaysOnSwitch.setChecked(false)
         }
 
         if (appActivity != null) {

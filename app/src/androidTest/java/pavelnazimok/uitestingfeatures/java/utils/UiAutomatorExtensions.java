@@ -208,6 +208,16 @@ public class UiAutomatorExtensions {
         waitUntilNotDisplayedByIdAndText(resId(viewId), resText(stringId), timeout);
     }
 
+    public static void setChecked(UiObject2 object, boolean check) {
+        if (check && !object.isChecked()) {
+            object.click();
+        } else if (!check && object.isChecked()) {
+            object.click();
+        }
+
+        waitUntilChecked(object, check, 3000);
+    }
+
     public static void waitUntilEnabled(UiObject2 object, long timeout) {
         if (!object.wait(Until.enabled(true), timeout)) {
             throw new UiAutomatorTimeoutException(String.format(
@@ -218,11 +228,12 @@ public class UiAutomatorExtensions {
         }
     }
 
-    public static void waitUntilChecked(UiObject2 object, boolean checked, long timeout) {
-        if (!object.wait(Until.checked(checked), timeout)) {
+    public static void waitUntilChecked(UiObject2 object, boolean check, long timeout) {
+        if (!object.wait(Until.checked(check), timeout)) {
             throw new UiAutomatorTimeoutException(String.format(
-                    "The UiObject2 with ID '%s' was not checked within %d millis",
+                    "The UiObject2 with ID '%s' was not set to %s within %d millis",
                     resId(object),
+                    String.valueOf(check),
                     timeout
             ));
         }
