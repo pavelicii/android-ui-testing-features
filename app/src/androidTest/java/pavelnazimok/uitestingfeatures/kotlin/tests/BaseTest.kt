@@ -12,7 +12,6 @@ import org.junit.runner.Description
 import org.junit.runner.RunWith
 import org.junit.runners.model.Statement
 import pavelnazimok.uitestingfeatures.MainActivity
-import pavelnazimok.uitestingfeatures.kotlin.robots.NETWORK_WAS_DISABLED_DURING_TEST
 import pavelnazimok.uitestingfeatures.kotlin.robots.onDevice
 import pavelnazimok.uitestingfeatures.kotlin.utils.CustomAnnotation
 import pavelnazimok.uitestingfeatures.kotlin.utils.isNetworkConnected
@@ -47,10 +46,8 @@ abstract class BaseTest {
 
     private val tearDownRule = object : ExternalResource() {
         override fun after() {
-            if (NETWORK_WAS_DISABLED_DURING_TEST) {
-                onDevice {
-                    setNetworkEnabled(true)
-                }
+            onDevice {
+                enableNetworkAfterTest()
             }
         }
     }

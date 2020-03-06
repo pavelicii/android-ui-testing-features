@@ -7,6 +7,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions
 import java.util.concurrent.TimeoutException
 import java.util.regex.Pattern
 
@@ -37,6 +38,16 @@ fun findByText(text: String, timeout: Long = 20000): UiObject2 {
 
 fun findByText(@StringRes stringId: Int, timeout: Long = 20000): UiObject2 {
     return findByText(resText(stringId), timeout)
+}
+
+fun findByTextPattern(textPattern: Pattern, timeout: Long = 20000): UiObject2 {
+    return UiAutomatorExtensions.device().wait(
+            Until.findObject(By.text(textPattern)),
+            timeout
+    )
+            ?: throw TimeoutException(
+                    "The UiObject2 with Pattern '$textPattern' was not found within $timeout millis"
+            )
 }
 
 fun findByIdAndText(viewId: String, text: String, timeout: Long = 20000): UiObject2 {

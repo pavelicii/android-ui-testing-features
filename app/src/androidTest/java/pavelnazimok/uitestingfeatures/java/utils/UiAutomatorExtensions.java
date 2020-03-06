@@ -59,6 +59,23 @@ public class UiAutomatorExtensions {
         return findByText(resText(stringId), timeout);
     }
 
+    public static UiObject2 findByTextPattern(Pattern textPattern, long timeout) {
+        UiObject2 object = device().wait(
+                Until.findObject(By.text(textPattern)),
+                timeout
+        );
+
+        if (object == null) {
+            throw new UiAutomatorTimeoutException(String.format(
+                    "The UiObject2 with Pattern '%s' was not found within %d millis",
+                    textPattern.toString(),
+                    timeout
+            ));
+        }
+
+        return object;
+    }
+
     public static UiObject2 findByIdAndText(String viewId, String text, long timeout) {
         UiObject2 object = device().wait(
                 Until.findObject(By

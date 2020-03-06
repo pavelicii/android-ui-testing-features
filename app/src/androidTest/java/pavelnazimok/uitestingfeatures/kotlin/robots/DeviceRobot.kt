@@ -2,7 +2,12 @@ package pavelnazimok.uitestingfeatures.kotlin.robots
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -21,20 +26,38 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.Assume.assumeFalse
 import org.junit.Assume.assumeTrue
-import pavelnazimok.uitestingfeatures.kotlin.utils.*
+import pavelnazimok.uitestingfeatures.kotlin.utils.device
+import pavelnazimok.uitestingfeatures.kotlin.utils.findById
+import pavelnazimok.uitestingfeatures.kotlin.utils.findByIdAndText
+import pavelnazimok.uitestingfeatures.kotlin.utils.findByIdAndTextPattern
+import pavelnazimok.uitestingfeatures.kotlin.utils.findByText
+import pavelnazimok.uitestingfeatures.kotlin.utils.findByTextPattern
+import pavelnazimok.uitestingfeatures.kotlin.utils.isAirplaneEnabled
+import pavelnazimok.uitestingfeatures.kotlin.utils.isEmulator
+import pavelnazimok.uitestingfeatures.kotlin.utils.isMobileDataEnabled
+import pavelnazimok.uitestingfeatures.kotlin.utils.isNetworkConnected
+import pavelnazimok.uitestingfeatures.kotlin.utils.networkType
+import pavelnazimok.uitestingfeatures.kotlin.utils.openNotification
+import pavelnazimok.uitestingfeatures.kotlin.utils.pressBack
+import pavelnazimok.uitestingfeatures.kotlin.utils.resText
+import pavelnazimok.uitestingfeatures.kotlin.utils.runningActivityOfAppUnderTest
+import pavelnazimok.uitestingfeatures.kotlin.utils.targetContext
+import pavelnazimok.uitestingfeatures.kotlin.utils.waitUntilChecked
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import java.util.regex.Pattern
 
-var NETWORK_TYPE_BEFORE_DISABLING = -1
-var NETWORK_WAS_DISABLED_DURING_TEST = false
+val BUTTON_VPN_SETTINGS_PATTERN: Pattern = Pattern.compile("\\S+:id/settings_button")
 
 fun onDevice(func: DeviceRobot.() -> Unit) = DeviceRobot().apply { func() }
 
 @SuppressLint("WifiManagerPotentialLeak")
 class DeviceRobot {
+
+    private var networkTypeBeforeDisabling = -1
+    private var networkWasDisabledDuringTest = false
 
     val currentIp: String
         get() {
@@ -96,10 +119,10 @@ class DeviceRobot {
     @Suppress("DEPRECATION")
     fun setNetworkEnabled(enabled: Boolean, timeout: Long = 20000) {
         if (enabled && !isNetworkConnected) {
-            if (NETWORK_TYPE_BEFORE_DISABLING == ConnectivityManager.TYPE_WIFI) {
+            if (networkTypeBeforeDisabling == ConnectivityManager.TYPE_WIFI) {
                 setWifiEnabled(true)
             } else if (
-                    NETWORK_TYPE_BEFORE_DISABLING == ConnectivityManager.TYPE_MOBILE || isEmulator
+                    networkTypeBeforeDisabling == ConnectivityManager.TYPE_MOBILE || isEmulator
             ) {
                 setMobileDataEnabled(true)
             } else {
@@ -115,11 +138,11 @@ class DeviceRobot {
                     isNetworkConnected
             )
         } else if (!enabled && isNetworkConnected) {
-            NETWORK_TYPE_BEFORE_DISABLING = networkType
+            networkTypeBeforeDisabling = networkType
 
-            if (NETWORK_TYPE_BEFORE_DISABLING == ConnectivityManager.TYPE_WIFI) {
+            if (networkTypeBeforeDisabling == ConnectivityManager.TYPE_WIFI) {
                 setWifiEnabled(false)
-            } else if (NETWORK_TYPE_BEFORE_DISABLING == ConnectivityManager.TYPE_MOBILE) {
+            } else if (networkTypeBeforeDisabling == ConnectivityManager.TYPE_MOBILE) {
                 setMobileDataEnabled(false)
             }
 
@@ -131,7 +154,8 @@ class DeviceRobot {
                     "Did not disconnect from a network within $timeout millis\nSkipping this test",
                     isNetworkConnected
             )
-            NETWORK_WAS_DISABLED_DURING_TEST = true
+
+            networkWasDisabledDuringTest = true
         }
     }
 
@@ -224,7 +248,7 @@ class DeviceRobot {
         val appMenuItemWithGear = device.wait(
                 Until.findObject(By
                         .hasDescendant(By.text(resText(appName)))
-                        .hasDescendant(By.res(Pattern.compile("\\S+:id/settings_button")))),
+                        .hasDescendant(By.res(BUTTON_VPN_SETTINGS_PATTERN))),
                 10000
         )
 
@@ -234,8 +258,7 @@ class DeviceRobot {
                 appMenuItemWithGear != null
         )
 
-        appMenuItemWithGear.findObject(By.res(Pattern.compile("\\S+:id/settings_button")))
-                .click()
+        appMenuItemWithGear.findObject(By.res(BUTTON_VPN_SETTINGS_PATTERN)).click()
 
         val alwaysOnSwitch = findById("switch_widget")
         if (enabled) {
@@ -272,7 +295,7 @@ class DeviceRobot {
         val appMenuItemWithGear = device.wait(
                 Until.findObject(By
                         .hasDescendant(By.text(resText(appName)))
-                        .hasDescendant(By.res(Pattern.compile("\\S+:id/settings_button")))),
+                        .hasDescendant(By.res(BUTTON_VPN_SETTINGS_PATTERN))),
                 10000
         )
 
@@ -281,13 +304,20 @@ class DeviceRobot {
                         "(e.g. Huawei) may provide no such option", appMenuItemWithGear != null
         )
 
-        appMenuItemWithGear.findObject(By.res(Pattern.compile("\\S+:id/settings_button"))).click()
+        appMenuItemWithGear.findObject(By.res(BUTTON_VPN_SETTINGS_PATTERN)).click()
 
-        findByText("Forget VPN").click()
+        findByTextPattern(Pattern.compile("Forget VPN|Delete VPN profile")).click()
         findById(android.R.id.button2).click()
 
         if (appActivity != null) {
             openActivity(appActivity)
+        }
+    }
+
+    fun enableNetworkAfterTest() {
+        if (networkWasDisabledDuringTest) {
+            setNetworkEnabled(true)
+            networkWasDisabledDuringTest = false
         }
     }
 

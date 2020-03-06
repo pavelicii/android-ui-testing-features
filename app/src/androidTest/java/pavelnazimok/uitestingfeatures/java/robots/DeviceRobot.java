@@ -50,16 +50,19 @@ import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.fi
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByIdAndText;
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByIdAndTextPattern;
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByText;
+import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.findByTextPattern;
 import static pavelnazimok.uitestingfeatures.java.utils.UiAutomatorExtensions.waitUntilChecked;
 
 @SuppressWarnings({ "UnusedReturnValue", "WeakerAccess" })
 public class DeviceRobot {
+    public static final Pattern BUTTON_VPN_SETTINGS_PATTERN = Pattern.compile("\\S+:id/settings_button");
+
     private Context targetContext() {
         return ApplicationProvider.getApplicationContext();
     }
 
     private int networkTypeBeforeDisabling = -1;
-    public boolean networkWasDisabledDuringTest = false;
+    private boolean networkWasDisabledDuringTest = false;
 
     public Response getHttpResponse(String url) throws IOException {
         int retryAttempts = 3;
@@ -245,7 +248,7 @@ public class DeviceRobot {
         UiObject2 appMenuItemWithGear = device().wait(
                 Until.findObject(By
                         .hasDescendant(By.text(resText(appName)))
-                        .hasDescendant(By.res(Pattern.compile("\\S+:id/settings_button")))),
+                        .hasDescendant(By.res(BUTTON_VPN_SETTINGS_PATTERN))),
                 10000
         );
 
@@ -254,7 +257,7 @@ public class DeviceRobot {
                 appMenuItemWithGear != null
         );
 
-        appMenuItemWithGear.findObject(By.res(Pattern.compile("\\S+:id/settings_button"))).click();
+        appMenuItemWithGear.findObject(By.res(BUTTON_VPN_SETTINGS_PATTERN)).click();
 
         UiObject2 alwaysOnSwitch = findById("switch_widget", 10000);
         if (enabled) {
@@ -275,6 +278,49 @@ public class DeviceRobot {
 
         if (appActivity != null) {
             openActivity(appActivity);
+        }
+
+        return this;
+    }
+
+    public DeviceRobot forgetVpnProfile(int appName) {
+        assumeTrue(
+                "VPN could be forgotten manually only on API 24 (Android 7.0) or higher",
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        );
+
+        Activity appActivity = getRunningActivityOfAppUnderTest();
+
+        openVpnSettings();
+
+        UiObject2 appMenuItemWithGear = device().wait(
+                Until.findObject(By
+                        .hasDescendant(By.text(resText(appName)))
+                        .hasDescendant(By.res(BUTTON_VPN_SETTINGS_PATTERN))),
+                10000
+        );
+
+        assumeTrue(
+                "VPN could not be forgotten on this device. Note that some manufacturers " +
+                        "(e.g. Huawei) may provide no such option", appMenuItemWithGear != null
+        );
+
+        appMenuItemWithGear.findObject(By.res(BUTTON_VPN_SETTINGS_PATTERN)).click();
+
+        findByTextPattern(Pattern.compile("Forget VPN|Delete VPN profile"), 5000).click();
+        findById(android.R.id.button2, 3000).click();
+
+        if (appActivity != null) {
+            openActivity(appActivity);
+        }
+
+        return this;
+    }
+
+    public DeviceRobot enableNetworkAfterTest() {
+        if (networkWasDisabledDuringTest) {
+            setNetworkEnabled(true);
+            networkWasDisabledDuringTest = false;
         }
 
         return this;

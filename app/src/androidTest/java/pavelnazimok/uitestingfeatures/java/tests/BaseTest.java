@@ -60,9 +60,7 @@ public abstract class BaseTest {
     private ExternalResource tearDownRule = new ExternalResource() {
         @Override
         protected void after() {
-            if (deviceRobot.networkWasDisabledDuringTest) {
-                deviceRobot.setNetworkEnabled(true);
-            }
+            deviceRobot.enableNetworkAfterTest();
         }
     };
 
