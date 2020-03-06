@@ -200,6 +200,7 @@ public class DeviceRobot {
 
     public DeviceRobot setWifiEnabled(boolean enabled) {
         if (isEmulator() && Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            //noinspection ResultOfMethodCallIgnored
             fail("Simulated Wi-Fi is not available on emulators with API 24 (Android 7.0) or lower");
         }
 
