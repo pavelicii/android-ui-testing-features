@@ -6,7 +6,7 @@ public class EspressoTimeoutException extends RuntimeException {
         super();
     }
 
-    EspressoTimeoutException(String message) {
+    EspressoTimeoutException(final String message) {
         super(message);
     }
 }

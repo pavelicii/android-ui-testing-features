@@ -1,12 +1,11 @@
 package pavelnazimok.uitestingfeatures;
 
 class CoffeeOrder {
-
     private int coffeePrice;
     private int coffeeCount;
     private int totalPrice;
 
-    CoffeeOrder(int coffeePrice) {
+    CoffeeOrder(final int coffeePrice) {
         coffeeCount = 0;
         totalPrice = 0;
         this.coffeePrice = coffeePrice;

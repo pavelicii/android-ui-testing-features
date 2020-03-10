@@ -11,7 +11,7 @@ public class ThirdScreenTest extends BaseTest {
         menuRobot
                 .clickThirdScreen();
 
-        String selectedItemText = thirdScreenRobot
+        final String selectedItemText = thirdScreenRobot
                 .clickShowListView()
                 .clickListViewItem(new Random().nextInt(thirdScreenRobot.getListViewCount()));
 

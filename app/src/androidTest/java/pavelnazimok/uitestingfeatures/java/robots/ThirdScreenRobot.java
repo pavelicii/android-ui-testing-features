@@ -22,16 +22,16 @@ public class ThirdScreenRobot {
         return this;
     }
 
-    public String clickListViewItem(int position) {
+    public String clickListViewItem(final int position) {
         final int listViewId = resId("android:id/select_dialog_listview");
         waitForView(listViewId, 5000);
         scrollListToPosition(listViewId, position);
-        String listViewItemText = getListViewItemText(listViewId, position);
+        final String listViewItemText = getListViewItemText(listViewId, position);
         clickListItem(listViewId, position);
         return listViewItemText;
     }
 
-    public ThirdScreenRobot assertSelectedItemIsDisplayed(String itemText) {
+    public ThirdScreenRobot assertSelectedItemIsDisplayed(final String itemText) {
         waitForView(R.id.label_item_selected, itemText, 10000);
         return this;
     }

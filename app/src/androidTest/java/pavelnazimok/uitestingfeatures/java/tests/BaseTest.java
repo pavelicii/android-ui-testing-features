@@ -27,6 +27,7 @@ import static pavelnazimok.uitestingfeatures.java.utils.AndroidExtensions.isNetw
 
 @RunWith(AndroidJUnit4.class)
 public abstract class BaseTest {
+
     FirstScreenRobot firstScreenRobot = new FirstScreenRobot();
     SecondScreenRobot secondScreenRobot = new SecondScreenRobot();
     ThirdScreenRobot thirdScreenRobot = new ThirdScreenRobot();
@@ -39,7 +40,7 @@ public abstract class BaseTest {
 
     private ExternalResource setUpRule = new ExternalResource() {
         @Override
-        public Statement apply(Statement base, Description description) {
+        public Statement apply(final Statement base, final Description description) {
             if (description.getAnnotation(CustomAnnotation.class) != null) {
                 System.out.println("This test is annotated with CustomAnnotation");
             }
@@ -74,7 +75,7 @@ public abstract class BaseTest {
             .around(tearDownRule);
 
     void openMainActivity() {
-        Intent mainActivityIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
+        final Intent mainActivityIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
         mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ApplicationProvider.getApplicationContext().startActivity(mainActivityIntent);
     }

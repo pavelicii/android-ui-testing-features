@@ -6,7 +6,7 @@ public class UiAutomatorTimeoutException extends RuntimeException {
         super();
     }
 
-    UiAutomatorTimeoutException(String message) {
+    UiAutomatorTimeoutException(final String message) {
         super(message);
     }
 }

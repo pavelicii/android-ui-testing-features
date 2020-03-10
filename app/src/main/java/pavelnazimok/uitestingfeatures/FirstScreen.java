@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class FirstScreen extends Fragment {
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.screen_first, container, false);
 
         final int defaultCoffeePrice = 5;
@@ -29,7 +28,7 @@ public class FirstScreen extends Fragment {
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 coffeeOrder.incrementCoffeeCount();
                 coffeeCount.setText(String.valueOf(coffeeOrder.getCoffeeCount()));
                 totalPrice.setText(String.valueOf(coffeeOrder.getTotalPrice()));
@@ -38,7 +37,7 @@ public class FirstScreen extends Fragment {
 
         decrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 coffeeOrder.decrementCoffeeCount();
                 coffeeCount.setText(String.valueOf(coffeeOrder.getCoffeeCount()));
                 totalPrice.setText(String.valueOf(coffeeOrder.getTotalPrice()));

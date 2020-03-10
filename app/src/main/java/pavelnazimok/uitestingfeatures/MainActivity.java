@@ -13,14 +13,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_bottom_bar);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+        final BottomNavigationView navView = findViewById(R.id.nav_bottom_bar);
+        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_first, R.id.nav_second, R.id.nav_third)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }

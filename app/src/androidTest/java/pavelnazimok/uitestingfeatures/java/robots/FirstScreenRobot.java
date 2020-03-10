@@ -29,17 +29,17 @@ public class FirstScreenRobot {
         return this;
     }
 
-    public FirstScreenRobot assertCoffeeCountEquals(int count) {
+    public FirstScreenRobot assertCoffeeCountEquals(final int count) {
         assertDisplayed(R.id.label_coffee_count, String.valueOf(count));
         return this;
     }
 
-    public FirstScreenRobot assertCoffeePriceEquals(int price) {
+    public FirstScreenRobot assertCoffeePriceEquals(final int price) {
         assertDisplayed(R.id.label_coffee_price, String.valueOf(price));
         return this;
     }
 
-    public FirstScreenRobot assertTotalPriceEquals(int price) {
+    public FirstScreenRobot assertTotalPriceEquals(final int price) {
         assertDisplayed(R.id.label_total_price, String.valueOf(price));
         return this;
     }

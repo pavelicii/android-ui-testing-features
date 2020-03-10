@@ -25,8 +25,8 @@ public class ReporterRunListener extends RunListener {
     private long testStartTime = System.currentTimeMillis();
     private String comment = "";
 
-    private void addResultForCase(long caseId, long statusId, long elapsed, String comment) throws InterruptedException {
-        Map<String, Object> data = new HashMap<>();
+    private void addResultForCase(final long caseId, final long statusId, final long elapsed, final String comment) throws InterruptedException {
+        final Map<String, Object> data = new HashMap<>();
 
         data.put("status_id", statusId);
         if (elapsed != 0) {
@@ -36,10 +36,10 @@ public class ReporterRunListener extends RunListener {
         data.put("comment", String.format("OS: %s, API: %d%s",
                 Build.VERSION.RELEASE,
                 Build.VERSION.SDK_INT,
-                comment.equals("") ? "" : "\n" + comment
+                "".equals(comment) ? "" : "\n" + comment
         ));
 
-        int maxAttempts = 5;
+        final int maxAttempts = 5;
         for (int i = 0; i < maxAttempts; i++) {
             try {
                 client.sendPost(String.format("add_result_for_case/%d/%d", runId, caseId), data);
@@ -55,7 +55,7 @@ public class ReporterRunListener extends RunListener {
     }
 
     @Override
-    public void testRunStarted(Description description) throws IOException, APIException {
+    public void testRunStarted(final Description description) throws IOException, APIException {
         /* Set your current Test Run ID.
         Another option is to create new Test Run here, but remember that when you use
         Android Test Orchestrator with 'clearPackageData' flag this event will be called for each test*/
@@ -63,10 +63,10 @@ public class ReporterRunListener extends RunListener {
 
         //noinspection ConstantConditions
         if (runId != 0) {
-            Map<String, Object> data = new HashMap<>();
+            final Map<String, Object> data = new HashMap<>();
 
-            String runName = "Your run name";
-            String runDescription = "Your run description";
+            final String runName = "Your run name";
+            final String runDescription = "Your run description";
 
             data.put("name", runName);
             data.put("description", runDescription);
@@ -76,7 +76,7 @@ public class ReporterRunListener extends RunListener {
     }
 
     @Override
-    public void testStarted(Description description) {
+    public void testStarted(final Description description) {
         currentTestStatusId = PASSED_ID;
         comment = "";
 
@@ -86,18 +86,18 @@ public class ReporterRunListener extends RunListener {
     }
 
     @Override
-    public void testFailure(Failure failure) {
+    public void testFailure(final Failure failure) {
         currentTestStatusId = FAILED_ID;
     }
 
     @Override
-    public void testAssumptionFailure(Failure failure) {
+    public void testAssumptionFailure(final Failure failure) {
         currentTestStatusId = IGNORED_ID;
         comment = failure.getMessage();
     }
 
     @Override
-    public void testIgnored(Description description) throws InterruptedException {
+    public void testIgnored(final Description description) throws InterruptedException {
         comment = description.getAnnotation(Ignore.class).value();
 
         if (runId != 0) {
@@ -113,7 +113,7 @@ public class ReporterRunListener extends RunListener {
     }
 
     @Override
-    public void testFinished(Description description) throws InterruptedException {
+    public void testFinished(final Description description) throws InterruptedException {
         if (runId != 0) {
             long elapsed = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - testStartTime);
             if (elapsed == 0) {

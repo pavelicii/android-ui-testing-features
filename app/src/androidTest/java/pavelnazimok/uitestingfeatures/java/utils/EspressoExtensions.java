@@ -43,8 +43,8 @@ import static pavelnazimok.uitestingfeatures.java.utils.AndroidExtensions.resTex
 
 public class EspressoExtensions {
 
-    public static void waitForView(Matcher<View> matcher, long timeout) {
-        long endTime = System.currentTimeMillis() + timeout;
+    public static void waitForView(final Matcher<View> matcher, final long timeout) {
+        final long endTime = System.currentTimeMillis() + timeout;
 
         while (System.currentTimeMillis() < endTime) {
             try {
@@ -62,24 +62,24 @@ public class EspressoExtensions {
         ));
     }
 
-    public static void waitForView(int resId, long timeout) {
+    public static void waitForView(final int resId, final long timeout) {
         waitForView(resourceMatcher(resId), timeout);
     }
 
-    public static void waitForView(String text, long timeout) {
+    public static void waitForView(final String text, final long timeout) {
         waitForView(withText(text), timeout);
     }
 
-    public static void waitForView(int viewId, int stringId, long timeout) {
+    public static void waitForView(final int viewId, final int stringId, final long timeout) {
         waitForView(allOf(withId(viewId), withText(stringId)), timeout);
     }
 
-    public static void waitForView(int viewId, String text, long timeout) {
+    public static void waitForView(final int viewId, final String text, final long timeout) {
         waitForView(allOf(withId(viewId), withText(text)), timeout);
     }
 
-    public static void waitForViewWithPattern(Matcher<View> matcher, Pattern pattern, long timeout) {
-        long endTime = System.currentTimeMillis() + timeout;
+    public static void waitForViewWithPattern(final Matcher<View> matcher, final Pattern pattern, final long timeout) {
+        final long endTime = System.currentTimeMillis() + timeout;
 
         while (System.currentTimeMillis() < endTime) {
             try {
@@ -93,33 +93,35 @@ public class EspressoExtensions {
         onView(matcher).check(matches(withPattern(pattern)));
     }
 
-    public static void waitForViewWithPattern(int viewId, Pattern pattern, long timeout) {
+    public static void waitForViewWithPattern(final int viewId, final Pattern pattern, final long timeout) {
         waitForViewWithPattern(withId(viewId), pattern, timeout);
     }
 
-    public static Matcher<View> withPattern(Pattern pattern) {
+    public static Matcher<View> withPattern(final Pattern pattern) {
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description
                         .appendText("with regex pattern: ")
                         .appendValue(pattern.toString());
             }
 
             @Override
-            protected boolean matchesSafely(TextView item) {
+            protected boolean matchesSafely(final TextView item) {
                 return pattern.matcher(item.getText()).find();
             }
         };
     }
 
-    public static void waitForTextInView(String text, int viewId, long timeout) {
-        long endTime = System.currentTimeMillis() + timeout;
+    public static void waitForTextInView(final String text, final int viewId, final long timeout) {
+        final long endTime = System.currentTimeMillis() + timeout;
         String textInView = "";
 
         while (System.currentTimeMillis() < endTime) {
             textInView = getText(viewId);
-            if (textInView.equals(text)) break;
+            if (textInView.equals(text)) {
+                break;
+            }
             sleepThread(500);
         }
 
@@ -128,30 +130,30 @@ public class EspressoExtensions {
                 .isEqualTo(text);
     }
 
-    public static void waitForTextInView(int stringId, int viewId, long timeout) {
+    public static void waitForTextInView(final int stringId, final int viewId, final long timeout) {
         waitForTextInView(resText(stringId), viewId, timeout);
     }
 
-    public static void waitForToast(String text, long timeout) {
-        Matcher<Root> matcher = new TypeSafeMatcher<Root>() {
+    public static void waitForToast(final String text, final long timeout) {
+        final Matcher<Root> matcher = new TypeSafeMatcher<Root>() {
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description.appendText("is Toast");
             }
 
             @Override
-            protected boolean matchesSafely(Root item) {
-                int type = item.getWindowLayoutParams().get().type;
+            protected boolean matchesSafely(final Root item) {
+                final int type = item.getWindowLayoutParams().get().type;
                 if (type == WindowManager.LayoutParams.TYPE_TOAST) {
-                    IBinder windowToken = item.getDecorView().getWindowToken();
-                    IBinder appToken = item.getDecorView().getApplicationWindowToken();
-                    return (windowToken == appToken);
+                    final IBinder windowToken = item.getDecorView().getWindowToken();
+                    final IBinder appToken = item.getDecorView().getApplicationWindowToken();
+                    return windowToken == appToken;
                 }
                 return false;
             }
         };
 
-        long endTime = System.currentTimeMillis() + timeout;
+        final long endTime = System.currentTimeMillis() + timeout;
         while (System.currentTimeMillis() < endTime) {
             try {
                 onView(withText(text)).inRoot(matcher).check(matches(isDisplayed()));
@@ -164,21 +166,21 @@ public class EspressoExtensions {
         throw new EspressoTimeoutException(String.format("The Toast with text '%s' was not found within %d millis", text, timeout));
     }
 
-    public static void setChecked(Matcher<View> matcher, boolean check) {
+    public static void setChecked(final Matcher<View> matcher, final boolean check) {
         onView(matcher).perform(new ViewAction() {
             @Override
             public BaseMatcher<View> getConstraints() {
                 return new BaseMatcher<View>() {
                     @Override
-                    public boolean matches(Object item) {
+                    public boolean matches(final Object item) {
                         return isA(Checkable.class).matches(item);
                     }
 
                     @Override
-                    public void describeMismatch(Object item, Description mismatchDescription) {}
+                    public void describeMismatch(final Object item, final Description mismatchDescription) { }
 
                     @Override
-                    public void describeTo(Description description) {}
+                    public void describeTo(final Description description) { }
                 };
             }
 
@@ -188,8 +190,8 @@ public class EspressoExtensions {
             }
 
             @Override
-            public void perform(UiController uiController, View view) {
-                Checkable checkableView = (Checkable) view;
+            public void perform(final UiController uiController, final View view) {
+                final Checkable checkableView = (Checkable) view;
 
                 if (check && !checkableView.isChecked()) {
                     view.performClick();
@@ -200,12 +202,12 @@ public class EspressoExtensions {
         });
     }
 
-    public static void setChecked(int viewId, boolean check) {
+    public static void setChecked(final int viewId, final boolean check) {
         setChecked(withId(viewId), check);
     }
 
-    public static String getText(Matcher<View> matcher) {
-        AtomicReference<String> text = new AtomicReference<>();
+    public static String getText(final Matcher<View> matcher) {
+        final AtomicReference<String> text = new AtomicReference<>();
 
         onView(allOf(matcher, not(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))).perform(new ViewAction() {
             @Override
@@ -219,7 +221,7 @@ public class EspressoExtensions {
             }
 
             @Override
-            public void perform(UiController uiController, View view) {
+            public void perform(final UiController uiController, final View view) {
                 text.set(((TextView) view).getText().toString());
             }
         });
@@ -227,20 +229,20 @@ public class EspressoExtensions {
         return text.get();
     }
 
-    public static String getText(int viewId) {
+    public static String getText(final int viewId) {
         return getText(withId(viewId));
     }
 
-    public static int getListViewItemsCount(int listViewId) {
-        AtomicInteger count = new AtomicInteger(0);
+    public static int getListViewItemsCount(final int listViewId) {
+        final AtomicInteger count = new AtomicInteger(0);
 
-        Matcher<View> matcher = new TypeSafeMatcher<View>() {
+        final Matcher<View> matcher = new TypeSafeMatcher<View>() {
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
             }
 
             @Override
-            protected boolean matchesSafely(View item) {
+            protected boolean matchesSafely(final View item) {
                 count.set(((ListView) item).getCount());
                 return true;
             }
@@ -250,8 +252,8 @@ public class EspressoExtensions {
         return count.get();
     }
 
-    public static String getListViewItemText(int listViewId, int position) {
-        AtomicReference<String> text = new AtomicReference<>();
+    public static String getListViewItemText(final int listViewId, final int position) {
+        final AtomicReference<String> text = new AtomicReference<>();
 
         onData(anything())
                 .inAdapterView(withId(listViewId))
@@ -268,7 +270,7 @@ public class EspressoExtensions {
                     }
 
                     @Override
-                    public void perform(UiController uiController, View view) {
+                    public void perform(final UiController uiController, final View view) {
                         text.set(((TextView) view).getText().toString());
                     }
                 });

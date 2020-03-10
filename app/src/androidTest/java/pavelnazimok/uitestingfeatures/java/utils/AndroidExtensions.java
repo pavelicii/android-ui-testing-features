@@ -14,13 +14,16 @@ import androidx.test.uiautomator.UiObject2;
 
 import java.lang.reflect.Field;
 
-public class AndroidExtensions {
+public final class AndroidExtensions {
 
-    public static String resId(int viewId) {
+    private AndroidExtensions() {
+    }
+
+    public static String resId(final int viewId) {
         return ApplicationProvider.getApplicationContext().getResources().getResourceEntryName(viewId);
     }
 
-    public static int resId(String viewId) {
+    public static int resId(final String viewId) {
         return ApplicationProvider.getApplicationContext().getResources().getIdentifier(
                 viewId,
                 null,
@@ -28,22 +31,22 @@ public class AndroidExtensions {
         );
     }
 
-    public static String resId(UiObject2 object) {
+    public static String resId(final UiObject2 object) {
         return object.getResourceName().split(":id/")[1];
     }
 
-    public static String resText(int stringId) {
+    public static String resText(final int stringId) {
         return ApplicationProvider.getApplicationContext().getResources().getString(stringId);
     }
 
     public static boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) ApplicationProvider.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager cm = (ConnectivityManager) ApplicationProvider.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (cm != null) {
-            NetworkInfo ni = cm.getActiveNetworkInfo();
+            final NetworkInfo ni = cm.getActiveNetworkInfo();
 
             if (ni != null) {
-                return (ni.isConnected() && (ni.getType() == ConnectivityManager.TYPE_WIFI || ni.getType() == ConnectivityManager.TYPE_MOBILE));
+                return ni.isConnected() && (ni.getType() == ConnectivityManager.TYPE_WIFI || ni.getType() == ConnectivityManager.TYPE_MOBILE);
             }
         }
 
@@ -55,7 +58,7 @@ public class AndroidExtensions {
     }
 
     public static boolean isMobileDataEnabled() {
-        TelephonyManager tm = (TelephonyManager) ApplicationProvider.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        final TelephonyManager tm = (TelephonyManager) ApplicationProvider.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         if (tm != null && tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
             return Settings.Secure.getInt(ApplicationProvider.getApplicationContext().getContentResolver(), "mobile_data", 1) == 1;
         }
@@ -74,10 +77,10 @@ public class AndroidExtensions {
     }
 
     public static int getNetworkType() {
-        ConnectivityManager cm = (ConnectivityManager) ApplicationProvider.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager cm = (ConnectivityManager) ApplicationProvider.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (cm != null) {
-            NetworkInfo ni = cm.getActiveNetworkInfo();
+            final NetworkInfo ni = cm.getActiveNetworkInfo();
 
             if (ni != null) {
                 if (ni.isConnected()) {
@@ -95,18 +98,18 @@ public class AndroidExtensions {
 
     public static Activity getRunningActivityOfAppUnderTest() {
         try {
-            Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
-            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
-            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            final Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+            final Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
+            final Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
             activitiesField.setAccessible(true);
-            ArrayMap activities = (ArrayMap) activitiesField.get(activityThread);
+            final ArrayMap activities = (ArrayMap) activitiesField.get(activityThread);
             if (activities != null) {
                 for (Object activityRecord : activities.values()) {
-                    Class activityRecordClass = activityRecord.getClass();
-                    Field pausedField = activityRecordClass.getDeclaredField("paused");
+                    final Class activityRecordClass = activityRecord.getClass();
+                    final Field pausedField = activityRecordClass.getDeclaredField("paused");
                     pausedField.setAccessible(true);
                     if (!pausedField.getBoolean(activityRecord)) {
-                        Field activityField = activityRecordClass.getDeclaredField("activity");
+                        final Field activityField = activityRecordClass.getDeclaredField("activity");
                         activityField.setAccessible(true);
                         return (Activity) activityField.get(activityRecord);
                     }

@@ -17,8 +17,8 @@ public class UiAutomatorExtensions {
         return UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
-    public static UiObject2 findById(String viewId, long timeout) {
-        UiObject2 object = device().wait(
+    public static UiObject2 findById(final String viewId, final long timeout) {
+        final UiObject2 object = device().wait(
                 Until.findObject(By.res(Pattern.compile("\\S+:id/" + viewId))),
                 timeout
         );
@@ -34,12 +34,12 @@ public class UiAutomatorExtensions {
         return object;
     }
 
-    public static UiObject2 findById(int viewId, long timeout) {
+    public static UiObject2 findById(final int viewId, final long timeout) {
         return findById(resId(viewId), timeout);
     }
 
-    public static UiObject2 findByText(String text, long timeout) {
-        UiObject2 object = device().wait(
+    public static UiObject2 findByText(final String text, final long timeout) {
+        final UiObject2 object = device().wait(
                 Until.findObject(By.text(text)),
                 timeout
         );
@@ -55,12 +55,12 @@ public class UiAutomatorExtensions {
         return object;
     }
 
-    public static UiObject2 findByText(int stringId, long timeout) {
+    public static UiObject2 findByText(final int stringId, final long timeout) {
         return findByText(resText(stringId), timeout);
     }
 
-    public static UiObject2 findByTextPattern(Pattern textPattern, long timeout) {
-        UiObject2 object = device().wait(
+    public static UiObject2 findByTextPattern(final Pattern textPattern, final long timeout) {
+        final UiObject2 object = device().wait(
                 Until.findObject(By.text(textPattern)),
                 timeout
         );
@@ -76,8 +76,8 @@ public class UiAutomatorExtensions {
         return object;
     }
 
-    public static UiObject2 findByIdAndText(String viewId, String text, long timeout) {
-        UiObject2 object = device().wait(
+    public static UiObject2 findByIdAndText(final String viewId, final String text, final long timeout) {
+        final UiObject2 object = device().wait(
                 Until.findObject(By
                         .res(Pattern.compile("\\S+:id/" + viewId))
                         .text(text)),
@@ -96,20 +96,20 @@ public class UiAutomatorExtensions {
         return object;
     }
 
-    public static UiObject2 findByIdAndText(int viewId, String text, long timeout) {
+    public static UiObject2 findByIdAndText(final int viewId, final String text, final long timeout) {
         return findByIdAndText(resId(viewId), text, timeout);
     }
 
-    public static UiObject2 findByIdAndText(String viewId, int stringId, long timeout) {
+    public static UiObject2 findByIdAndText(final String viewId, final int stringId, final long timeout) {
         return findByIdAndText(viewId, resText(stringId), timeout);
     }
 
-    public static UiObject2 findByIdAndText(int viewId, int stringId, long timeout) {
+    public static UiObject2 findByIdAndText(final int viewId, final int stringId, final long timeout) {
         return findByIdAndText(resId(viewId), resText(stringId), timeout);
     }
 
-    public static UiObject2 findByIdAndTextPattern(String viewId, Pattern textPattern, long timeout) {
-        UiObject2 object = device().wait(
+    public static UiObject2 findByIdAndTextPattern(final String viewId, final Pattern textPattern, final long timeout) {
+        final UiObject2 object = device().wait(
                 Until.findObject(By
                         .res(Pattern.compile("\\S+:id/" + viewId))
                         .text(textPattern)),
@@ -128,12 +128,12 @@ public class UiAutomatorExtensions {
         return object;
     }
 
-    public static UiObject2 findByIdAndTextPattern(int viewId, Pattern textPattern, long timeout) {
+    public static UiObject2 findByIdAndTextPattern(final int viewId, final Pattern textPattern, final long timeout) {
         return findByIdAndTextPattern(resId(viewId), textPattern, timeout);
     }
 
-    public static void waitUntilNotDisplayedById(String viewId, long timeout) {
-        long endTime = System.currentTimeMillis() + timeout;
+    public static void waitUntilNotDisplayedById(final String viewId, final long timeout) {
+        final long endTime = System.currentTimeMillis() + timeout;
         while (System.currentTimeMillis() < endTime) {
             try {
                 findById(viewId, 1000);
@@ -153,12 +153,12 @@ public class UiAutomatorExtensions {
         ));
     }
 
-    public static void waitUntilNotDisplayedById(int viewId, long timeout) {
+    public static void waitUntilNotDisplayedById(final int viewId, final long timeout) {
         waitUntilNotDisplayedById(resId(viewId), timeout);
     }
 
-    public static void waitUntilNotDisplayedByText(String text, long timeout) {
-        long endTime = System.currentTimeMillis() + timeout;
+    public static void waitUntilNotDisplayedByText(final String text, final long timeout) {
+        final long endTime = System.currentTimeMillis() + timeout;
         while (System.currentTimeMillis() < endTime) {
             findByText(text, 1000);
             try {
@@ -174,12 +174,12 @@ public class UiAutomatorExtensions {
         ));
     }
 
-    public static void waitUntilNotDisplayedByText(int stringId, long timeout) {
+    public static void waitUntilNotDisplayedByText(final int stringId, final long timeout) {
         waitUntilNotDisplayedByText(resText(stringId), timeout);
     }
 
-    public static void waitUntilNotDisplayedByIdAndText(String viewId, String text, long timeout) {
-        long endTime = System.currentTimeMillis() + timeout;
+    public static void waitUntilNotDisplayedByIdAndText(final String viewId, final String text, final long timeout) {
+        final long endTime = System.currentTimeMillis() + timeout;
         while (System.currentTimeMillis() < endTime) {
             findByIdAndText(viewId, text, 1000);
             try {
@@ -196,19 +196,19 @@ public class UiAutomatorExtensions {
         ));
     }
 
-    public static void waitUntilNotDisplayedByIdAndText(int viewId, String text, long timeout) {
+    public static void waitUntilNotDisplayedByIdAndText(final int viewId, final String text, final long timeout) {
         waitUntilNotDisplayedByIdAndText(resId(viewId), text, timeout);
     }
 
-    public static void waitUntilNotDisplayedByIdAndText(String viewId, int stringId, long timeout) {
+    public static void waitUntilNotDisplayedByIdAndText(final String viewId, final int stringId, final long timeout) {
         waitUntilNotDisplayedByIdAndText(viewId, resText(stringId), timeout);
     }
 
-    public static void waitUntilNotDisplayedByIdAndText(int viewId, int stringId, long timeout) {
+    public static void waitUntilNotDisplayedByIdAndText(final int viewId, final int stringId, final long timeout) {
         waitUntilNotDisplayedByIdAndText(resId(viewId), resText(stringId), timeout);
     }
 
-    public static void setChecked(UiObject2 object, boolean check) {
+    public static void setChecked(final UiObject2 object, final boolean check) {
         if (check && !object.isChecked()) {
             object.click();
         } else if (!check && object.isChecked()) {
@@ -218,7 +218,7 @@ public class UiAutomatorExtensions {
         waitUntilChecked(object, check, 3000);
     }
 
-    public static void waitUntilEnabled(UiObject2 object, long timeout) {
+    public static void waitUntilEnabled(final UiObject2 object, final long timeout) {
         if (!object.wait(Until.enabled(true), timeout)) {
             throw new UiAutomatorTimeoutException(String.format(
                     "The UiObject2 with ID '%s' was not enabled within %d millis",
@@ -228,7 +228,7 @@ public class UiAutomatorExtensions {
         }
     }
 
-    public static void waitUntilChecked(UiObject2 object, boolean check, long timeout) {
+    public static void waitUntilChecked(final UiObject2 object, final boolean check, final long timeout) {
         if (!object.wait(Until.checked(check), timeout)) {
             throw new UiAutomatorTimeoutException(String.format(
                     "The UiObject2 with ID '%s' was not set to %s within %d millis",

@@ -5,14 +5,13 @@ import org.junit.Test;
 import pavelnazimok.uitestingfeatures.java.utils.CustomAnnotation;
 import pavelnazimok.uitestingfeatures.testrail.CaseId;
 
-
 public class FirstScreenTest extends BaseTest {
 
     @Test
     @CustomAnnotation
     @CaseId(1)
     public void coffeeCountAndTotalPrice_afterClickIncrement_shouldIncrease() {
-        int coffeePrice = firstScreenRobot.getCoffeePrice();
+        final int coffeePrice = firstScreenRobot.getCoffeePrice();
 
         firstScreenRobot
                 .assertFirstScreenIsDisplayed()

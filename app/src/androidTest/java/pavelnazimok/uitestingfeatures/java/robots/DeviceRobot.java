@@ -64,10 +64,10 @@ public class DeviceRobot {
     private int networkTypeBeforeDisabling = -1;
     private boolean networkWasDisabledDuringTest = false;
 
-    public Response getHttpResponse(String url) throws IOException {
-        int retryAttempts = 3;
+    public Response getHttpResponse(final String url) throws IOException {
+        final int retryAttempts = 3;
 
-        OkHttpClient httpClient = new OkHttpClient.Builder()
+        final OkHttpClient httpClient = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .build();
 
@@ -76,7 +76,7 @@ public class DeviceRobot {
 
         for (int i = 0; i < retryAttempts; ++i) {
             try {
-                Request request = new Request.Builder()
+                final Request request = new Request.Builder()
                         .url(url)
                         .build();
 
@@ -120,8 +120,8 @@ public class DeviceRobot {
      * If there is no initial network on the device, it will try to enable Wi-Fi on real devices
      * and Mobile data on emulators.
      */
-    public DeviceRobot setNetworkEnabled(boolean enabled) {
-        long networkTimeout = 20000;
+    public DeviceRobot setNetworkEnabled(final boolean enabled) {
+        final long networkTimeout = 20000;
 
         if (enabled && !isNetworkConnected()) {
             if (networkTypeBeforeDisabling == ConnectivityManager.TYPE_WIFI) {
@@ -132,7 +132,7 @@ public class DeviceRobot {
                 setWifiEnabled(true);
             }
 
-            long endTime = System.currentTimeMillis() + networkTimeout;
+            final long endTime = System.currentTimeMillis() + networkTimeout;
             while (!isNetworkConnected() && System.currentTimeMillis() < endTime) {
                 sleepThread(1000);
             }
@@ -149,7 +149,7 @@ public class DeviceRobot {
                 setMobileDataEnabled(false);
             }
 
-            long endTime = System.currentTimeMillis() + networkTimeout;
+            final long endTime = System.currentTimeMillis() + networkTimeout;
             while (isNetworkConnected() && System.currentTimeMillis() < endTime) {
                 sleepThread(1000);
             }
@@ -164,22 +164,22 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot setAirplaneEnabled(boolean enabled) {
+    public DeviceRobot setAirplaneEnabled(final boolean enabled) {
         if ((enabled && !isAirplaneEnabled()) || (!enabled && isAirplaneEnabled())) {
-            Activity appActivity = getRunningActivityOfAppUnderTest();
+            final Activity appActivity = getRunningActivityOfAppUnderTest();
 
             try {
-                Intent airplaneIntent = new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS);
+                final Intent airplaneIntent = new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS);
                 airplaneIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 targetContext().startActivity(airplaneIntent);
             } catch (ActivityNotFoundException e) {
-                Intent wirelessSettingsIntent = new Intent("android.settings.WIRELESS_SETTINGS");
+                final Intent wirelessSettingsIntent = new Intent("android.settings.WIRELESS_SETTINGS");
                 wirelessSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 targetContext().startActivity(wirelessSettingsIntent);
             }
 
             UiObject2 airplaneSwitch;
-            Pattern airplaneTextPattern = Pattern.compile("Airplane mode|Aeroplane mode");
+            final Pattern airplaneTextPattern = Pattern.compile("Airplane mode|Aeroplane mode");
 
             try {
                 airplaneSwitch = findByIdAndTextPattern(android.R.id.title, airplaneTextPattern, 5000);
@@ -198,13 +198,13 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot setWifiEnabled(boolean enabled) {
+    public DeviceRobot setWifiEnabled(final boolean enabled) {
         if (isEmulator() && Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             //noinspection ResultOfMethodCallIgnored
             fail("Simulated Wi-Fi is not available on emulators with API 24 (Android 7.0) or lower");
         }
 
-        WifiManager wifiManager = (WifiManager) targetContext().getSystemService(Context.WIFI_SERVICE);
+        final WifiManager wifiManager = (WifiManager) targetContext().getSystemService(Context.WIFI_SERVICE);
         assertThat(wifiManager).isNotNull();
 
         wifiManager.setWifiEnabled(enabled);
@@ -212,16 +212,16 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot setMobileDataEnabled(boolean enabled) {
+    public DeviceRobot setMobileDataEnabled(final boolean enabled) {
         assumeTrue(
                 "Mobile data switching is not implemented for API 22 (Android 5.1) or lower",
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         );
 
         if ((enabled && !isMobileDataEnabled()) || (!enabled && isMobileDataEnabled())) {
-            Activity appActivity = getRunningActivityOfAppUnderTest();
+            final Activity appActivity = getRunningActivityOfAppUnderTest();
 
-            Intent dataUsageIntent = new Intent();
+            final Intent dataUsageIntent = new Intent();
             dataUsageIntent.setComponent(new ComponentName("com.android.settings", "com.android.settings.Settings$DataUsageSummaryActivity"));
             dataUsageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             targetContext().startActivity(dataUsageIntent);
@@ -236,17 +236,17 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot setAlwaysOnVpnEnabled(boolean enabled, int appName) {
+    public DeviceRobot setAlwaysOnVpnEnabled(final boolean enabled, final int appName) {
         assumeTrue(
                 "Always-on VPN settings are only available on API 24 (Android 7.0) or higher",
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
         );
 
-        Activity appActivity = getRunningActivityOfAppUnderTest();
+        final Activity appActivity = getRunningActivityOfAppUnderTest();
 
         openVpnSettings();
 
-        UiObject2 appMenuItemWithGear = device().wait(
+        final UiObject2 appMenuItemWithGear = device().wait(
                 Until.findObject(By
                         .hasDescendant(By.text(resText(appName)))
                         .hasDescendant(By.res(BUTTON_VPN_SETTINGS_PATTERN))),
@@ -260,7 +260,7 @@ public class DeviceRobot {
 
         appMenuItemWithGear.findObject(By.res(BUTTON_VPN_SETTINGS_PATTERN)).click();
 
-        UiObject2 alwaysOnSwitch = findById("switch_widget", 10000);
+        final UiObject2 alwaysOnSwitch = findById("switch_widget", 10000);
         if (enabled) {
             setChecked(alwaysOnSwitch, false);
             setChecked(alwaysOnSwitch, true);
@@ -276,17 +276,17 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot forgetVpnProfile(int appName) {
+    public DeviceRobot forgetVpnProfile(final int appName) {
         assumeTrue(
                 "VPN could be forgotten manually only on API 24 (Android 7.0) or higher",
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
         );
 
-        Activity appActivity = getRunningActivityOfAppUnderTest();
+        final Activity appActivity = getRunningActivityOfAppUnderTest();
 
         openVpnSettings();
 
-        UiObject2 appMenuItemWithGear = device().wait(
+        final UiObject2 appMenuItemWithGear = device().wait(
                 Until.findObject(By
                         .hasDescendant(By.text(resText(appName)))
                         .hasDescendant(By.res(BUTTON_VPN_SETTINGS_PATTERN))),
@@ -319,8 +319,8 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot openActivity(Activity activity) {
-        Intent activityIntent = new Intent(targetContext(), activity.getClass());
+    public DeviceRobot openActivity(final Activity activity) {
+        final Intent activityIntent = new Intent(targetContext(), activity.getClass());
         activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         targetContext().startActivity(activityIntent);
         sleepThread(2000);
@@ -328,7 +328,7 @@ public class DeviceRobot {
     }
 
     public DeviceRobot openVpnSettings() {
-        Intent vpnSettingsIntent = new Intent("android.net.vpn.SETTINGS");
+        final Intent vpnSettingsIntent = new Intent("android.net.vpn.SETTINGS");
         vpnSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         targetContext().startActivity(vpnSettingsIntent);
         return assertVpnSettingsScreenIsDisplayed();
@@ -348,26 +348,32 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot assertNotificationIsDisplayed(String title, String message) {
+    public DeviceRobot assertNotificationIsDisplayed(final String title, final String message) {
         findByText(title, 10000);
         findByText(message, 10000);
         return this;
     }
 
     public String getClipboardText() {
-        AtomicReference<String> clipboardText = new AtomicReference<>("");
-        CountDownLatch latch = new CountDownLatch(1);
+        final AtomicReference<String> clipboardText = new AtomicReference<>("");
+        final CountDownLatch latch = new CountDownLatch(1);
         new Handler(Looper.getMainLooper()).post(
                 new Runnable() {
                     @Override
                     public void run() {
-                        ClipboardManager clipboard = (ClipboardManager) targetContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        final ClipboardManager clipboard = (ClipboardManager) targetContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = null;
                         ClipData.Item item = null;
 
-                        if (clipboard != null) { clip = clipboard.getPrimaryClip(); }
-                        if (clip != null) { item = clip.getItemAt(0); }
-                        if (item != null) { clipboardText.set(item.getText().toString()); }
+                        if (clipboard != null) {
+                            clip = clipboard.getPrimaryClip();
+                        }
+                        if (clip != null) {
+                            item = clip.getItemAt(0);
+                        }
+                        if (item != null) {
+                            clipboardText.set(item.getText().toString());
+                        }
                         latch.countDown();
                     }
                 }
@@ -395,7 +401,7 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot sleep(long timeout) {
+    public DeviceRobot sleep(final long timeout) {
         sleepThread(timeout);
         return this;
     }
