@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'checkstyle'
+apply from: '../quality/quality.gradle'
 
 android {
     compileSdkVersion 29
@@ -56,18 +56,4 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
     androidTestUtil 'androidx.test:orchestrator:1.2.0'
-}
-
-checkstyle {
-    toolVersion '8.30'
-    configFile file("${project.rootDir}/checkstyle.xml")
-}
-
-task checkstyle(type: Checkstyle) {
-    configFile file("${project.rootDir}/checkstyle.xml")
-    source 'src'
-    include '**/*.java'
-    exclude '**/gen/**'
-
-    classpath = files()
 }
