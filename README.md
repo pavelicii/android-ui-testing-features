@@ -1,17 +1,17 @@
 # Android UI Testing Features
 
 I use this repository as storage of Android UI testing practices from my experience: test patterns, naming conventions, wrapper methods for test and device actions, etc.
-Some of these come from single projects, others — from a common codebase for tests.
+Some of these come from single projects, others — from common test codebases.
 
 They are written both in Java and Kotlin.
 
-:cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future. There is also a simple Android app which I can run and test something against.
+:cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future. There is also a simple Android app which you can run to test something against it.
 
 ## Tests
 
-In this repository, there are a simple Android app and Instrumentation tests which you can run against the app.
+In this repository, there are a simple Android app and Instrumentation tests.
 
-Currently, the app consists of 3 screens:
+The app has only 3 screens:
 
 ![First Screen](/docres/screen_first.png) ![Second Screen](/docres/screen_second.png) ![Third Screen](/docres/screen_third.png)
  
@@ -19,7 +19,7 @@ There is a test class for each screen. Tests are written based on concepts and t
 
 ## Tools
 
-For now, the whole testing stuff is made with the help of and for these frameworks:
+All testing stuff is made with the help of the following frameworks:
 
 * [Espresso](https://developer.android.com/training/testing/espresso/) — Instrumentation testing framework by Google
 * [Barista](https://github.com/SchibstedSpain/Barista) — built on top of Espresso and provides more simple API
@@ -31,7 +31,7 @@ For now, the whole testing stuff is made with the help of and for these framewor
 
 ## Test Pattern
 
-UI tests are written with the **Testing Robots** design pattern.
+UI tests are written with the **Testing Robots** design pattern, which is very similar to Page Object.
 
 The idea is that each app screen should have its own Robot where you describe test steps which you can apply to the screen.
 You then chain these steps in a test.
@@ -63,7 +63,7 @@ public void unitOfWork_stateUnderTest_expectedBehavior() {}
 
 ## Utils
 
-These mainly contain method wrappers for frequently used, extended and complicated UI or device-specific actions. 
+These mainly contain method wrappers for frequently used and complicated UI or device-specific actions.
 It has waiters, view property getters, improved assert messages, syntactic sugar, etc.
 
 * [`EspressoExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/EspressoExtensions.java) | [`EspressoExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/EspressoExtensions.kt) — custom Espresso-like methods/functions (also, consider Kaspresso)
@@ -85,7 +85,14 @@ To make it work you need to:
 * Annotate your tests with Test Case ID from TestRail (you need a custom [Annotation](app/src/androidTest/java/pavelnazimok/uitestingfeatures/testrail/CaseId.java) for this):
 
 ```Java
-@Test 
+@Test
 @CaseId(1)
-public void your_test_name() {}
+public void your_test_name() { }
 ```
+
+## Lint checks
+
+There are configured linters for both languages:
+
+* Java: [checkstyle](https://github.com/checkstyle/checkstyle). To run, execute `gradlew checkstyle` command in Terminal
+* Kotlin: [ktlint](https://github.com/pinterest/ktlint). To run, execute `gradlew ktlint` command in Terminal
