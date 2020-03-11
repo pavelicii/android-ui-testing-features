@@ -1,21 +1,18 @@
 package pavelnazimok.uitestingfeatures.kotlin.tests
 
 import android.Manifest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
 import org.junit.runner.Description
-import org.junit.runner.RunWith
 import org.junit.runners.model.Statement
 import pavelnazimok.uitestingfeatures.MainActivity
 import pavelnazimok.uitestingfeatures.kotlin.robots.onDevice
 import pavelnazimok.uitestingfeatures.kotlin.utils.CustomAnnotation
 import pavelnazimok.uitestingfeatures.kotlin.utils.isNetworkConnected
 
-@RunWith(AndroidJUnit4::class)
 abstract class BaseTest {
 
     private val runtimePermissionRule = GrantPermissionRule.grant(

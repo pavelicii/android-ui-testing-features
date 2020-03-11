@@ -2,7 +2,6 @@ package pavelnazimok.uitestingfeatures.java.tests;
 
 import android.Manifest;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -10,7 +9,6 @@ import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.RuleChain;
 import org.junit.runner.Description;
-import org.junit.runner.RunWith;
 import org.junit.runners.model.Statement;
 
 import pavelnazimok.uitestingfeatures.MainActivity;
@@ -23,7 +21,6 @@ import pavelnazimok.uitestingfeatures.java.utils.CustomAnnotation;
 
 import static pavelnazimok.uitestingfeatures.java.utils.AndroidExtensions.isNetworkConnected;
 
-@RunWith(AndroidJUnit4.class)
 public abstract class BaseTest {
 
     final FirstScreenRobot firstScreenRobot = new FirstScreenRobot();

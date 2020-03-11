@@ -1,10 +1,14 @@
 package pavelnazimok.uitestingfeatures.java.tests;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import pavelnazimok.uitestingfeatures.java.utils.CustomAnnotation;
 import pavelnazimok.uitestingfeatures.testrail.CaseId;
 
+@RunWith(AndroidJUnit4.class)
 public class FirstScreenTest extends BaseTest {
 
     @Test
@@ -26,6 +30,7 @@ public class FirstScreenTest extends BaseTest {
                 .assertTotalPriceEquals(coffeePrice * 3);
     }
 
+    // This ↓ test should fail!
     @Test
     public void coffeeCountAndTotalPrice_afterClickDecrement_shouldDecreaseNotLessThanZero() {
         firstScreenRobot

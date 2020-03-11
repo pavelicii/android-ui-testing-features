@@ -1,9 +1,12 @@
 package pavelnazimok.uitestingfeatures.kotlin.tests
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
+import org.junit.runner.RunWith
 import pavelnazimok.uitestingfeatures.kotlin.robots.onFirstScreen
 import pavelnazimok.uitestingfeatures.kotlin.utils.CustomAnnotation
 
+@RunWith(AndroidJUnit4::class)
 class FirstScreenTest : BaseTest() {
 
     @Test
