@@ -1,9 +1,7 @@
 package pavelnazimok.uitestingfeatures.java.tests;
 
 import android.Manifest;
-import android.content.Intent;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
@@ -28,11 +26,11 @@ import static pavelnazimok.uitestingfeatures.java.utils.AndroidExtensions.isNetw
 @RunWith(AndroidJUnit4.class)
 public abstract class BaseTest {
 
-    FirstScreenRobot firstScreenRobot = new FirstScreenRobot();
-    SecondScreenRobot secondScreenRobot = new SecondScreenRobot();
-    ThirdScreenRobot thirdScreenRobot = new ThirdScreenRobot();
-    MenuRobot menuRobot = new MenuRobot();
-    DeviceRobot deviceRobot = new DeviceRobot();
+    final FirstScreenRobot firstScreenRobot = new FirstScreenRobot();
+    final SecondScreenRobot secondScreenRobot = new SecondScreenRobot();
+    final ThirdScreenRobot thirdScreenRobot = new ThirdScreenRobot();
+    final MenuRobot menuRobot = new MenuRobot();
+    final DeviceRobot deviceRobot = new DeviceRobot();
 
     private GrantPermissionRule runtimePermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_COARSE_LOCATION
@@ -55,6 +53,8 @@ public abstract class BaseTest {
             }
 
             activityTestRule.launchActivity(null);
+
+            deviceRobot.wakeUp();
         }
     };
 
@@ -73,10 +73,4 @@ public abstract class BaseTest {
             .around(setUpRule)
             .around(activityTestRule)
             .around(tearDownRule);
-
-    void openMainActivity() {
-        final Intent mainActivityIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ApplicationProvider.getApplicationContext().startActivity(mainActivityIntent);
-    }
 }

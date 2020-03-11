@@ -313,11 +313,16 @@ class DeviceRobot {
         }
     }
 
-    fun openActivity(activity: Activity) {
-        val activityIntent = Intent(targetContext, activity.javaClass)
+    fun openActivity(activity: Class<out Activity>): DeviceRobot {
+        val activityIntent = Intent(targetContext, activity)
         activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         targetContext.startActivity(activityIntent)
         sleepThread(2000)
+        return this
+    }
+
+    fun openActivity(activity: Activity): DeviceRobot {
+        return openActivity(activity.javaClass)
     }
 
     fun openNotificationShade() {

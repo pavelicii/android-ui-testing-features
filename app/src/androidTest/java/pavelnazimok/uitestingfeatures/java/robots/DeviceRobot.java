@@ -319,12 +319,16 @@ public class DeviceRobot {
         return this;
     }
 
-    public DeviceRobot openActivity(final Activity activity) {
-        final Intent activityIntent = new Intent(targetContext(), activity.getClass());
+    public DeviceRobot openActivity(final Class<? extends Activity> activity) {
+        final Intent activityIntent = new Intent(targetContext(), activity);
         activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         targetContext().startActivity(activityIntent);
         sleepThread(2000);
         return this;
+    }
+
+    public DeviceRobot openActivity(final Activity activity) {
+        return openActivity(activity.getClass());
     }
 
     public DeviceRobot openVpnSettings() {

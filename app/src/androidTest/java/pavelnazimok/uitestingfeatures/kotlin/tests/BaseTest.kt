@@ -1,7 +1,6 @@
 package pavelnazimok.uitestingfeatures.kotlin.tests
 
 import android.Manifest
-import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
@@ -15,7 +14,6 @@ import pavelnazimok.uitestingfeatures.MainActivity
 import pavelnazimok.uitestingfeatures.kotlin.robots.onDevice
 import pavelnazimok.uitestingfeatures.kotlin.utils.CustomAnnotation
 import pavelnazimok.uitestingfeatures.kotlin.utils.isNetworkConnected
-import pavelnazimok.uitestingfeatures.kotlin.utils.targetContext
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseTest {
@@ -41,6 +39,10 @@ abstract class BaseTest {
             }
 
             activityTestRule.launchActivity(null)
+
+            onDevice {
+                wakeUp()
+            }
         }
     }
 
@@ -60,10 +62,4 @@ abstract class BaseTest {
             .around(setUpRule)
             .around(activityTestRule)
             .around(tearDownRule)
-
-    internal fun openMainActivity() {
-        val mainActivityIntent = Intent(targetContext, MainActivity::class.java)
-        mainActivityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        targetContext.startActivity(mainActivityIntent)
-    }
 }
