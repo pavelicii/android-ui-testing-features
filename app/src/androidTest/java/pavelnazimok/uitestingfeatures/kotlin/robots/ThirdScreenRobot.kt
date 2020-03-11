@@ -6,8 +6,6 @@ import com.schibsted.spain.barista.interaction.BaristaListInteractions.scrollLis
 import pavelnazimok.uitestingfeatures.R
 import pavelnazimok.uitestingfeatures.kotlin.utils.getListViewItemText
 import pavelnazimok.uitestingfeatures.kotlin.utils.getListViewItemsCount
-
-
 import pavelnazimok.uitestingfeatures.kotlin.utils.resId
 import pavelnazimok.uitestingfeatures.kotlin.utils.waitForView
 

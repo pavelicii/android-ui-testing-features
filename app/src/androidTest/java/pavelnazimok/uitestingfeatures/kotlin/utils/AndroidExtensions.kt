@@ -48,9 +48,9 @@ val isNetworkConnected: Boolean
 
             if (ni != null) {
                 @Suppress("DEPRECATION")
-                return ni.isConnected
-                        && (ni.type == ConnectivityManager.TYPE_WIFI
-                        || ni.type == ConnectivityManager.TYPE_MOBILE)
+                return ni.isConnected &&
+                        (ni.type == ConnectivityManager.TYPE_WIFI ||
+                        ni.type == ConnectivityManager.TYPE_MOBILE)
             }
         }
 

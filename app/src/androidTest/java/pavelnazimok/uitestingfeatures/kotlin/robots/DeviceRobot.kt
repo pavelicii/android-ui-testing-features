@@ -333,7 +333,7 @@ class DeviceRobot {
         assertVpnSettingsScreenIsDisplayed()
     }
 
-    fun getClipboardText():String {
+    fun getClipboardText(): String {
         var clipboardText = ""
         val latch = CountDownLatch(1)
 
