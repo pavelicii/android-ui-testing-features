@@ -5,9 +5,9 @@ Some of these come from single projects, others — from common test codebases.
 
 They are written both in Java and Kotlin.
 
-:cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future. There is also a simple Android app which you can run to test something against it.
+:cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future.
 
-## Tests
+## App&Tests
 
 In this repository, there are a simple Android app and Instrumentation tests.
 
