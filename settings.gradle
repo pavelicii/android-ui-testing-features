@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='UITestingFeaturesAndroid'
+rootProject.name='android-ui-testing-features'

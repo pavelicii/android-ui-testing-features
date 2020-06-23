@@ -13,7 +13,7 @@ dependencies {
 }
 
 checkstyle {
-    toolVersion '8.30'
+    toolVersion '8.33'
     configFile file("../quality/checkstyle.xml")
 }
 

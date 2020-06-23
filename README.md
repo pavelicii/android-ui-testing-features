@@ -1,8 +1,9 @@
 # Android UI Testing Features
 
 I use this repository as storage of Android UI testing practices from my experience: test patterns, naming conventions, wrapper methods for test and device actions, etc.
-Some of these come from single projects, others — from common test codebases.
+Or as a part of my programming portfolio.
 
+Some of these come from single projects, others — from common test codebases.
 They are written both in Java and Kotlin.
 
 :cactus: It's not a separate framework, it's just helpers and aliases for personal reuse in the future.
@@ -29,7 +30,7 @@ All testing stuff is made with the help of the following frameworks:
 >*Everything in this repository was done before the release of a very promising [Kaspresso](https://github.com/KasperskyLab/Kaspresso) framework. 
 >Some of the wrappers presented here (e.g. waiters) could now be well-replaced by their Kaspresso implementation.*
 
-## Test Pattern
+## Test Design Pattern
 
 UI tests are written with the **Testing Robots** design pattern, which is very similar to Page Object.
 
@@ -37,8 +38,8 @@ The idea is that each app screen should have its own Robot where you describe te
 You then chain these steps in a test.
 
 See the examples:
-* Java: [`ScreenRobot`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/robots/FirstScreenRobot.java), [`ScreenTest`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/tests/FirstScreenTest.java)
-* Kotlin: [`ScreenRobot`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/robots/FirstScreenRobot.kt), [`ScreenTest`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/tests/FirstScreenTest.kt)
+* Java: [`ScreenRobot`](app/src/androidTest/java/com.pavelnazimok/uitesting/java/robots/FirstScreenRobot.java), [`ScreenTest`](app/src/androidTest/java/com.pavelnazimok/uitesting/java/tests/FirstScreenTest.java)
+* Kotlin: [`ScreenRobot`](app/src/androidTest/java/com.pavelnazimok/uitesting/kotlin/robots/FirstScreenRobot.kt), [`ScreenTest`](app/src/androidTest/java/com.pavelnazimok/uitesting/kotlin/tests/FirstScreenTest.kt)
 
 You can figure out the base concepts of the pattern from this [talk](https://jakewharton.com/testing-robots/) by Jake Wharton.
 
@@ -66,23 +67,23 @@ public void unitOfWork_stateUnderTest_expectedBehavior() {}
 These mainly contain method wrappers for frequently used and complicated UI or device-specific actions.
 It has waiters, view property getters, improved assert messages, syntactic sugar, etc.
 
-* [`EspressoExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/EspressoExtensions.java) | [`EspressoExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/EspressoExtensions.kt) — custom Espresso-like methods/functions (also, consider Kaspresso)
-* [`UiAutomatorExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/UiAutomatorExtensions.java) | [`UiAutomatorExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/UiAutomatorExtensions.kt) — custom methods/functions to work with
+* [`EspressoExtensions.java`](app/src/androidTest/java/com.pavelnazimok/uitesting/java/utils/EspressoExtensions.java) | [`EspressoExtensions.kt`](app/src/androidTest/java/com.pavelnazimok/uitesting/kotlin/utils/EspressoExtensions.kt) — custom Espresso-like methods/functions (also, consider Kaspresso)
+* [`UiAutomatorExtensions.java`](app/src/androidTest/java/com.pavelnazimok/uitesting/java/utils/UiAutomatorExtensions.java) | [`UiAutomatorExtensions.kt`](app/src/androidTest/java/com.pavelnazimok/uitesting/kotlin/utils/UiAutomatorExtensions.kt) — custom methods/functions to work with
 UI Automator's API, mostly with [`UiObject2`](https://developer.android.com/reference/androidx/test/uiautomator/UiObject2) UI elements
-* [`AndroidExtensions.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/java/utils/AndroidExtensions.java) | [`AndroidExtensions.kt`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/kotlin/utils/AndroidExtensions.kt) — device-specific actions
+* [`AndroidExtensions.java`](app/src/androidTest/java/com.pavelnazimok/uitesting/java/utils/AndroidExtensions.java) | [`AndroidExtensions.kt`](app/src/androidTest/java/com.pavelnazimok/uitesting/kotlin/utils/AndroidExtensions.kt) — device-specific actions
 
 ## TMS Integration
 
 One possible way to integrate your tests with Test Management System is to report test results during test execution.
 For this one can use [JUnit RunListener API](https://junit.org/junit4/javadoc/4.12/org/junit/runner/notification/RunListener.html).
 
-There is an implementation of such Listener to report to TestRail: [`ReporterRunListener.java`](app/src/androidTest/java/pavelnazimok/uitestingfeatures/testrail/ReporterRunListener.java).
+There is an implementation of such Listener to report to TestRail: [`ReporterRunListener.java`](app/src/androidTest/java/com.pavelnazimok/uitesting/testrail/ReporterRunListener.java).
 
 To make it work you need to:
 
 * Add [TestRail API bindings](http://docs.gurock.com/testrail-api2/start) to your project (unfortunately, you can't add it as a dependency yet)
 * Create [`AndroidManifest.xml`](app/src/androidTest/AndroidManifest.xml) for a test app 
-* Annotate your tests with Test Case ID from TestRail (you need a custom [Annotation](app/src/androidTest/java/pavelnazimok/uitestingfeatures/testrail/CaseId.java) for this):
+* Annotate your tests with Test Case ID from TestRail (you need a custom [Annotation](app/src/androidTest/java/com.pavelnazimok/uitesting/testrail/CaseId.java) for this):
 
 ```Java
 @Test
